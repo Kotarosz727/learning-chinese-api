@@ -23,13 +23,13 @@ module.exports.fetchList = async () => {
   }
 };
 
-module.exports.postFavorite = async (event) => {
+module.exports.postFavorite = async (event, context) => {
   const data = JSON.parse(event.body);
   const params = {
-    tableName: tableName,
+    TableName: tableName,
     Item: {
       firstid: data.firstid,
-      secondid: data.userid,
+      secondid: data.secondid,
       chinese: data.chinese,
       japanese: data.japanese,
       pinin: data.pinin,
@@ -37,7 +37,7 @@ module.exports.postFavorite = async (event) => {
   };
 
   try {
-    await db.put(params).promise();
+    const result = await db.put(params).promise();
     return {
       statusCode: 200,
       headers: {
