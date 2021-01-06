@@ -40,6 +40,10 @@ module.exports.postFavorite = async (event) => {
     await db.put(params).promise();
     return {
       statusCode: 200,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers": "Content-Type",
+      },
       body: JSON.stringify(result),
     };
   } catch (error) {
