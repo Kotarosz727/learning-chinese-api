@@ -41,4 +41,12 @@ functions:
           path: sentences
           method: get
           cors: true
+  postFavorite:
+    handler: api/sentences.postFavorite
+    description: post favorite
+    events:
+      - http:
+          path: sentences
+          method: post
+          cors: true
 
