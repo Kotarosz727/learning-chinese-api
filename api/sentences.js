@@ -53,3 +53,33 @@ module.exports.postFavorite = async (event, context) => {
     };
   }
 };
+
+module.exports.fetchFavorite = async (event, context) => {
+  const data = JSON.parse(event.body);
+  const params = {
+    TableName: tableName,
+    IndexName: "secondid-firstid-index",
+    KeyConditionExpression: "#userid = :secondid" ,
+    ExpressionAttributeNames: {"#userid":"secondid"},
+    ExpressionAttributeValues: {
+      ":secondid": data.secondid,
+    },
+  };
+
+  try {
+    const result = await db.query(params).promise();
+    return {
+      statusCode: 200,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers": "Content-Type",
+      },
+      body: JSON.stringify(result),
+    };
+  } catch (error) {
+    return {
+      statusCode: error.statusCode,
+      body: error.message,
+    };
+  }
+};

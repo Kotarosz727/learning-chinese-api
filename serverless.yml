@@ -50,3 +50,11 @@ functions:
           path: sentences
           method: post
           cors: true
+  fetchFavorite:
+    handler: api/sentences.fetchFavorite
+    description: fetch favorite
+    events:
+      - http:
+          path: favorites
+          method: post
+          cors: true
