@@ -15,6 +15,7 @@ provider:
         - dynamodb:Scan
         - dynamodb:GetItem
         - dynamodb:PutItem
+        - dynamodb:DeleteItem
       Resource: "*"
 
 # you can add packaging information here
@@ -57,4 +58,12 @@ functions:
       - http:
           path: favorites
           method: post
+          cors: true
+  deleteFavorite:
+    handler: api/sentences.deleteFavorite
+    description: fetch favorite
+    events:
+      - http:
+          path: favorites
+          method: delete
           cors: true

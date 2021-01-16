@@ -26,10 +26,9 @@ module.exports.fetchList = async () => {
 module.exports.postFavorite = async (event, context) => {
   const data = JSON.parse(event.body);
   const params = {
-    TableName: tableName,
+    TableName: "UserFavorite",
     Item: {
-      firstid: data.firstid,
-      secondid: data.secondid,
+      userid: data.userid,
       chinese: data.chinese,
       japanese: data.japanese,
       pinin: data.pinin,
@@ -57,12 +56,11 @@ module.exports.postFavorite = async (event, context) => {
 module.exports.fetchFavorite = async (event, context) => {
   const data = JSON.parse(event.body);
   const params = {
-    TableName: tableName,
-    IndexName: "secondid-firstid-index",
-    KeyConditionExpression: "#userid = :secondid" ,
-    ExpressionAttributeNames: {"#userid":"secondid"},
+    TableName: "UserFavorite",
+    KeyConditionExpression: "#userid = :userid",
+    ExpressionAttributeNames: { "#userid": "userid" },
     ExpressionAttributeValues: {
-      ":secondid": data.secondid,
+      ":userid": data.userid,
     },
   };
 
@@ -75,6 +73,34 @@ module.exports.fetchFavorite = async (event, context) => {
         "Access-Control-Allow-Headers": "Content-Type",
       },
       body: JSON.stringify(result),
+    };
+  } catch (error) {
+    return {
+      statusCode: error.statusCode,
+      body: error.message,
+    };
+  }
+};
+
+module.exports.deleteFavorite = async (event, context) => {
+  const data = JSON.parse(event.body);
+  const params = {
+    TableName: "UserFavorite",
+    Key: {
+      userid: data.userid,
+      chinese: data.chinese,
+    },
+  };
+
+  try {
+    const result = await db.delete(params).promise();
+    return {
+      statusCode: 200,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers": "Content-Type",
+      },
+      body: JSON.stringify({ message: "deleted succesfully", data: result }),
     };
   } catch (error) {
     return {
