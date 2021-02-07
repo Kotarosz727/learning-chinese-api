@@ -39,6 +39,10 @@ functions:
     handler: api/sentences.fetchList
     description: List all sentences
     events:
+      # - http:
+      #     path: sentences/{info}
+      #     method: get
+      #     cors: true
       - http:
           path: sentences
           method: get

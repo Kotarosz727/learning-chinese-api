@@ -8,9 +8,19 @@ const dynamoDB = {
   TableName: tableName,
 };
 
-module.exports.fetchList = async () => {
+module.exports.fetchList = async (event) => {
+  
+  const params = {
+    TableName: tableName,
+    KeyConditionExpression: "#info = :info",
+    ExpressionAttributeNames: { "#info": "info" },
+    ExpressionAttributeValues: {
+      ":info": event.queryStringParameters.info,
+    },
+  };
+
   try {
-    const result = await db.scan(dynamoDB).promise();
+    const result = await db.query(params).promise();
     return {
       statusCode: 200,
       headers: {
@@ -36,6 +46,7 @@ module.exports.postFavorite = async (event, context) => {
       chinese: data.chinese,
       japanese: data.japanese,
       pinin: data.pinin,
+      type: data.type
     },
   };
 
