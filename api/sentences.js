@@ -9,7 +9,6 @@ const dynamoDB = {
 };
 
 module.exports.fetchList = async (event) => {
-  
   const params = {
     TableName: tableName,
     KeyConditionExpression: "#info = :info",
@@ -46,7 +45,8 @@ module.exports.postFavorite = async (event, context) => {
       chinese: data.chinese,
       japanese: data.japanese,
       pinin: data.pinin,
-      type: data.type
+      type: data.type,
+      created_at: data.created_at,
     },
   };
 
@@ -72,6 +72,7 @@ module.exports.fetchFavorite = async (event, context) => {
   const data = JSON.parse(event.body);
   const params = {
     TableName: "UserFavorite",
+    IndexName: 'userid-created_at-index',
     KeyConditionExpression: "#userid = :userid",
     ExpressionAttributeNames: { "#userid": "userid" },
     ExpressionAttributeValues: {
